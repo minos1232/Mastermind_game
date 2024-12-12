@@ -28,28 +28,50 @@ class Mastermind
 
   def winner_checker
     colors_checker = color_choices.dup
-    correct_guess = 0
+    @correct_guess = 0
     half_correct_guess = 0 #correct color but wrong position
     for i in 0...4
       if colors_guess[i] == colors_checker[i]
-        correct_guess += 1
+        @correct_guess += 1
         colors_checker[i] ='checked'
       end
     end
     for i in 0...4
       for j in 0...4
-        if colors_guess[i] == colors_checker[j]
+        if @colors_guess[i] == colors_checker[j]
             half_correct_guess += 1
             colors_checker[j] = 'checked'
         end
       end
     end
-    puts "you have #{correct_guess} correct in right position and #{half_correct_guess} correct but in a wrong position"
+    puts "you have #{@correct_guess} correct in right position and #{half_correct_guess} correct but in a wrong position"
   end
- def play
-   player_guess
-   winner_checker
- end
+
+  def winner?
+    winner_checker
+    if @correct_guess == 4   
+      return true
+    else
+      return false
+    end
+  end
+
+  def play
+    guess_number = 0
+    while guess_number <= 12
+      guess_number += 1
+      puts "guess number #{guess_number} :"
+      player_guess
+      if winner?
+        puts "you won in #{guess_number} guesses, you are a mastermind!"
+        break
+      end
+    end
+    if guess_number > 12
+      puts "you used all your guess chances, you lost\nThis was the answer"
+      puts color_choices
+    end
+  end
 end
 
 game = Mastermind.new
