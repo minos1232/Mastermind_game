@@ -74,6 +74,45 @@ class Mastermind
     end
   end
 
+  def computer_play
+    @colors_guess = @game_colors.sample(4) # First random guess
+  
+    for attempt in 1..12 do
+      puts "Computer's guess ##{attempt}: #{@colors_guess.inspect}"
+      winner_checker # Check how many are correct and in the right/wrong positions
+      
+      if @correct_guess == 4  
+        puts "The computer guessed the correct combination in #{attempt} attempts!"
+        return
+      end
+      refine_guess # Refine the guess for the next attempt
+    end
+  
+    # If the computer fails to guess within 12 attempts
+    puts "The computer failed to guess the correct combination within 12 attempts."
+    puts "The correct combination was: #{@color_choices.inspect}"
+  end
+  
+  def refine_guess
+    # Array to store confirmed colors in correct positions
+    confirmed_colors = Array.new(4)
+  
+    @colors_guess.each_with_index do |color, index|
+      if @color_choices[index] == color
+        confirmed_colors[index] = color
+      end
+    end
+  
+    # Rebuild the new guess
+    @colors_guess = confirmed_colors.map.with_index do |color, index|
+      if color
+        color # Keep confirmed color in place
+      else
+        @game_colors.sample
+      end
+    end
+  end
+
   private
   def guesser_start
     guesser_array = []
@@ -107,4 +146,4 @@ loop do
   end
 end
 game = Mastermind.new(choice)
-game.play
+choice == 1 ? game.play : game.computer_play
