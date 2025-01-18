@@ -32,7 +32,7 @@ class Mastermind
     @correct_guess = 0
     half_correct_guess = 0 #correct color but wrong position
     for i in 0...4
-      if colors_guess[i] == colors_checker[i]
+      if @colors_guess[i] == colors_checker[i]
         @correct_guess += 1
         colors_checker[i] ='checked'
       end
@@ -50,11 +50,7 @@ class Mastermind
 
   def winner?
     winner_checker
-    if @correct_guess == 4   
-      return true
-    else
-      return false
-    end
+    @correct_guess == 4   
   end
 
   def play
